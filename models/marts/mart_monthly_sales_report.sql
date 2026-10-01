@@ -1,8 +1,15 @@
 with months as (
     select distinct strptime(month, '%Y-%m')::date as month_start
     from {{ ref('stg_monthly_targets') }}
-), teams as (
+), target_teams as (
     select distinct team from {{ ref('stg_monthly_targets') }}
+), actual_teams as (
+    select distinct team from {{ ref('fct_revenue') }}
+    where invoice_date >= date '2025-01-01' and invoice_date < date '2026-01-01'
+), teams as (
+    select team from target_teams
+    union
+    select team from actual_teams
 ), grid as (
     select m.month_start, t.team from months m cross join teams t
 ), actuals as (
@@ -41,7 +48,7 @@ select
     margin_eur,
     case when revenue_eur <> 0 then margin_eur / revenue_eur else null end as margin_pct,
     target_revenue_eur,
-    revenue_eur - target_revenue_eur as variance_to_target_eur,
+    case when target_revenue_eur is not null then revenue_eur - target_revenue_eur else null end as variance_to_target_eur,
     case when target_revenue_eur <> 0 then revenue_eur / target_revenue_eur else null end as target_attainment_pct,
     sum(revenue_eur) over (partition by team order by month_start rows between 2 preceding and current row) as rolling_3m_revenue_eur,
     invoice_count,
