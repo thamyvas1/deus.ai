@@ -1,0 +1,20 @@
+name: 'deus_sales_analytics'
+version: '1.0.0'
+config-version: 2
+profile: 'deus_sales_analytics'
+model-paths: ['models']
+seed-paths: ['seeds']
+analysis-paths: ['analysis']
+test-paths: ['tests']
+docs-paths: ['docs']
+models:
+  deus_sales_analytics:
+    staging:
+      +materialized: view
+    intermediate:
+      +materialized: view
+    marts:
+      +materialized: table
+seeds:
+  deus_sales_analytics:
+    +quote_columns: false
