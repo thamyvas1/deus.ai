@@ -1,0 +1,7 @@
+deus_sales_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: deus_sales_analytics.duckdb
+      threads: 4
