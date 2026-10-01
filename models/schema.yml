@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: stg_accounts
+    columns:
+      - name: account_id
+        tests: [not_null, unique]
+  - name: stg_sales_reps
+    columns:
+      - name: rep_id
+        tests: [not_null, unique]
+  - name: stg_opportunities
+    columns:
+      - name: opportunity_id
+        tests: [not_null, unique]
+      - name: account_id
+        tests: [not_null]
+      - name: rep_id
+        tests: [not_null]
+  - name: stg_invoices
+    columns:
+      - name: invoice_id
+        tests: [not_null, unique]
+      - name: line_type
+        tests:
+          - accepted_values:
+              values: ['INVOICE', 'CREDIT_NOTE']
+  - name: stg_monthly_targets
+    columns:
+      - name: month
+        tests: [not_null]
+      - name: team
+        tests: [not_null]
+  - name: fct_revenue
+    columns:
+      - name: invoice_id
+        tests: [not_null, unique]
+      - name: account_id
+        tests:
+          - relationships:
+              to: ref('stg_accounts')
+              field: account_id
+  - name: mart_monthly_sales_report
+    columns:
+      - name: month_start
+        tests: [not_null]
+      - name: team
+        tests: [not_null]
+  - name: mart_quarterly_top_accounts
+    columns:
+      - name: quarter_start
+        tests: [not_null]
