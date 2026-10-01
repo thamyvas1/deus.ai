@@ -14,10 +14,10 @@ A reproducible dbt + DuckDB solution for the sales analytics case.
 
 ## Headline numbers
 
-Using unique invoice IDs and preserving the source sign on credit notes:
+Using one row per unique invoice ID and preserving the source sign on credit notes:
 
-- **2025 net revenue: €10,399,987.57**
-- **2025 known-cost margin: €5,081,518.76**
+- **2025 net revenue: €9,493,212.43**
+- **2025 known-cost margin: €3,967,322.00**
 
 Margin is based only on invoices with a populated cost; see `docs/decisions.md`.
 
@@ -41,7 +41,7 @@ The DuckDB file is created at `deus_sales_analytics.duckdb`.
 ## Business outputs
 
 ### Monthly report
-`mart_monthly_sales_report` contains one row per team/month in 2025 with:
+`mart_monthly_sales_report` contains one row per team/month in 2025, including an `Unassigned` team bucket so unattributed revenue remains visible. Columns include:
 
 - revenue
 - margin and margin %
