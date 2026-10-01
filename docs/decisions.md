@@ -7,10 +7,10 @@ Finance invoices are the source of truth for realized revenue. The core fact gra
 There are 7 duplicated invoice IDs in the source. The duplicated rows are exact repeats, so `stg_invoices` keeps one row per `invoice_id` using `row_number()`.
 
 ## Credit notes
-Credit-note amounts are already negative in the source. We preserve the source sign rather than applying another sign.
+Credit-note amounts are already negative in the source. We preserve the source sign rather than applying another sign. This means credit notes reduce revenue and margin.
 
 ## Invoice-to-opportunity attribution
-A valid opportunity supplies rep and team. If an invoice has no opportunity or references an opportunity absent from CRM, the revenue is retained and assigned to `Unassigned` rather than dropped. In 2025, 61 unique invoices are unattributed, representing €1,912,289.25.
+A valid opportunity supplies rep and team. If an invoice has no opportunity or references an opportunity absent from CRM, the revenue is retained and assigned to `Unassigned` rather than dropped. In 2025, 61 unique invoices are unattributed, representing €1,632,323.64 of signed revenue.
 
 Three opportunity IDs referenced by invoices are absent from CRM: `OPP-9001`, `OPP-9002`, and `OPP-9003`.
 
@@ -21,7 +21,7 @@ Five unique 2025 invoices have null cost. Revenue is retained. Margin is calcula
 The sales-director report is limited to invoice dates in calendar year 2025. Other dates remain in the fact model but are excluded from the requested report.
 
 ## Targets and report grain
-The target table is authoritative for monthly team targets. The report builds a complete month/team grid so zero-activity months remain visible.
+The target table is authoritative for monthly team targets. The report builds a complete month/team grid for target teams and adds `Unassigned` so unattributed revenue is not hidden. Zero-activity months remain visible.
 
 ## Rolling revenue
 Trailing 3-month revenue is the current month plus the prior two calendar months for each team.
@@ -32,8 +32,8 @@ Accounts are ranked by signed invoice revenue within each calendar quarter of 20
 ## Headline numbers
 After deduplicating invoice IDs and preserving source signs:
 
-- **2025 net revenue: €10,399,987.57**
-- **2025 known-cost margin: €5,081,518.76**
-- **Known-cost margin / total revenue: 48.86%**
+- **2025 net revenue: €9,493,212.43**
+- **2025 known-cost margin: €3,967,322.00**
+- **Known-cost margin / total revenue: 41.79%**
 
 The margin percentage should be interpreted with the missing-cost caveat above.
